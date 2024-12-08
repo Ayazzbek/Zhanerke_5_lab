@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 2.5em;
+            color: #2c3e50;
+        }
+
+        .container {
+            width: 100%;
+            margin: 50px auto 0;
+        }
+
+        /* Кнопка "Home" */
+        .header {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .home-button {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .home-button:hover {
+            background-color: #2c3e50;
+        }
+
+        /* Формы */
+        form {
+            background-color: #fff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            margin-right: 10px;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        input[type="text"], input[type="date"], select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 1em;
+        }
+
+        button {
+            background-color: #2c3e50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1a252f;
+        }
+
+        .add-task {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .add-task a {
+            text-decoration: none;
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.2em;
+        }
+
+        .add-task a:hover {
+            background-color: #2c3e50;
+        }
+
+        /* Таблица */
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: #fff;
+        }
+
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        td a {
+            color: #2c3e50;
+            text-decoration: none;
+            margin-right: 5px;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+
+        /* Пагинация */
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .pagination a {
+            padding: 10px 15px;
+            background-color: #fff;
+            color: #2c3e50;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background-color: #2c3e50;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <a href="/" class="home-button">Home</a>
+</div>
+<h1>Tasks</h1>
+
+<div class="add-task" th:if="${user.role.name() == 'ADMIN'}">
+    <a href="/tasks/new">Add New Task</a>
+</div>
+
+<div class="container">
+
+
+    <!-- Поиск -->
+    <form method="get" th:action="@{/tasks/list}">
+        <label for="query">Search: </label>
+        <input type="text" id="query" name="searchQuery" th:value="${searchQuery}" placeholder="Search tasks">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Фильтрация -->
+    <form method="get" th:action="@{/tasks/list}">
+        <label>Status: </label>
+        <select name="status">
+            <option th:value="PENDING" th:text="#{task.status.pending}"></option>
+            <option th:value="IN_PROGRESS" th:text="#{task.status.in_progress}"></option>
+            <option th:value="COMPLETED" th:text="#{task.status.completed}"></option>
+            <option th:value="CANCELLED" th:text="#{task.status.cancelled}"></option>
+        </select>
+
+        <label>Due Date: </label>
+        <input type="date" name="dueDate"/>
+
+        <label>Category: </label>
+        <input type="text" name="categoryId"/>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Сообщение, если задач не найдено -->
+    <div th:if="${message != null}">
+        <p th:text="${message}"></p>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Category</th>  <!-- Новый столбец для категории -->
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.title}"></td>
+            <td th:text="${task.taskDescription}"></td>
+            <td th:text="${task.taskStatus}"></td>
+            <td th:text="${task.dueDate}"></td>
+            <td th:text="${task.category.categoryName}"></td> <!-- Отображение категории -->
+            <td>
+                <!-- Изменение статуса задачи -->
+                <form method="post" th:action="@{/tasks/status/{id}(id=${task.taskId})}" th:if="${user.role.name() == 'USER'}">
+                    <select name="status">
+                        <option th:value="PENDING" th:text="#{task.status.pending}"></option>
+                        <option th:value="IN_PROGRESS" th:text="#{task.status.in_progress}"></option>
+                        <option th:value="COMPLETED" th:text="#{task.status.completed}"></option>
+                        <option th:value="CANCELLED" th:text="#{task.status.cancelled}"></option>
+                    </select>
+                    <button type="submit">Update</button>
+                </form>
+
+                <!-- Редактировать/Удалить (только для администраторов) -->
+                <div th:if="${user.role.name() == 'ADMIN'}">
+                    <a th:href="@{/tasks/edit/{id}(id=${task.taskId})}">Edit</a> |
+                    <a th:href="@{/tasks/delete/{id}(id=${task.taskId})}">Delete</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+
+    <!-- Пагинация -->
+    <div class="pagination">
+        <span th:if="${totalPages > 1}">
+            <a th:href="@{/tasks/page/{pageNo}(pageNo=1)}">First</a>
+            <a th:href="@{/tasks/page/{pageNo}(pageNo=${currentPage - 1})}">Prev</a>
+            <a th:href="@{/tasks/page/{pageNo}(pageNo=${currentPage + 1})}">Next</a>
+            <a th:href="@{/tasks/page/{pageNo}(pageNo=${totalPages})}">Last</a>
+        </span>
+    </div>
+</div>
+</body>
+</html>

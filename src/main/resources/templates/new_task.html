@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add New Task</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 2em;
+      color: #2c3e50;
+    }
+
+    .task-form {
+      width: 50%;
+      margin: 30px auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .task-form label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.1em;
+    }
+
+    .task-form input,
+    .task-form textarea,
+    .task-form select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    .task-form button {
+      padding: 10px 20px;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+
+    .task-form button:hover {
+      background-color: #3498db;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.1em;
+    }
+
+    .back-link a {
+      text-decoration: none;
+      color: #2980b9;
+    }
+
+    .back-link a:hover {
+      color: #3498db;
+    }
+  </style>
+</head>
+<body>
+<h1>Create New Task</h1>
+
+<div class="task-form">
+  <form method="post" th:action="@{/tasks/save}">
+    <label for="title">Title: </label>
+    <input id="title" type="text" name="title" required/>
+
+    <label for="taskDescription">Description: </label>
+    <textarea id="taskDescription" name="taskDescription"></textarea>
+
+    <label for="dueDate">Due Date: </label>
+    <input id="dueDate" type="date" name="dueDate"/>
+
+    <label for="status">Status: </label>
+    <select id="status" name="status">
+      <option th:value="PENDING" th:text="#{task.status.pending}"></option>
+      <option th:value="IN_PROGRESS" th:text="#{task.status.in_progress}"></option>
+      <option th:value="COMPLETED" th:text="#{task.status.completed}"></option>
+      <option th:value="CANCELLED" th:text="#{task.status.cancelled}"></option>
+    </select>
+
+    <label for="categoryId">Category: </label>
+    <select id="categoryId" name="categoryId" required>
+      <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
+      <option th:if="${categories == null || categories.isEmpty()}" value="" disabled selected>No categories available</option>
+    </select>
+
+    <label for="userId">User: </label>
+    <select id="userId" name="userId" required>
+      <option th:each="user : ${users}" th:value="${user.userId}" th:text="${user.userName}"></option>
+      <option th:if="${users == null || users.isEmpty()}" value="" disabled selected>No users available</option>
+    </select>
+
+    <button type="submit">Save</button>
+  </form>
+</div>
+
+<div class="back-link">
+  <a href="/tasks/list">Back to Task List</a>
+</div>
+</body>
+</html>
+
+
+
+

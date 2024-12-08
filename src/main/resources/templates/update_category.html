@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Category</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 2em;
+      color: #2c3e50;
+    }
+
+    /* Card-like container for the form */
+    .form-container {
+      width: 60%;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      font-size: 1.1em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    /* Form fields */
+    input, textarea, button {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Back Button */
+    .back-button {
+      text-decoration: none;
+      display: inline-block;
+      background-color: #ecf0f1;
+      color: #3498db;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    .back-button:hover {
+      background-color: #3498db;
+      color: white;
+    }
+
+    /* Styling for disabled inputs */
+    input[disabled] {
+      background-color: #f9f9f9;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Edit Category</h1>
+
+<!-- Form Container -->
+<div class="form-container">
+  <form method="post" action="/categories/save">
+    <input type="hidden" name="categoryId" th:value="${category.categoryId}">
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="categoryName" th:value="${category.categoryName}" required>
+
+    <label for="desc">Description:</label>
+    <textarea id="desc" name="categoryDesc" th:text="${category.categoryDesc}"></textarea>
+
+    <button type="submit">Update</button>
+  </form>
+</div>
+
+<!-- Back Button -->
+<a href="/categories" class="back-button">Back to Category</a>
+
+</body>
+</html>

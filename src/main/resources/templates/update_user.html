@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 2em;
+            color: #2c3e50;
+        }
+
+        /* Card-like container for the form */
+        .form-container {
+            width: 60%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* Form fields */
+        input, select, button {
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Back Button */
+        .back-button {
+            text-decoration: none;
+            display: inline-block;
+            background-color: #ecf0f1;
+            color: #3498db;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* Styling for disabled inputs */
+        input[disabled] {
+            background-color: #f9f9f9;
+            cursor: not-allowed;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>Edit User</h1>
+
+<div class="form-container">
+    <form action="/user/update" method="post">
+        <input type="hidden" name="userId" th:value="${user.userId}" /> <!-- User ID is hidden for form submission -->
+
+        <!-- Display User's Name and Email as non-editable -->
+        <label for="userName">Name</label>
+        <input type="text" id="userName" name="userName" value="${user.userName}" disabled />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="${user.email}" disabled />
+
+        <!-- Select Role (editable) -->
+        <label for="role">Role</label>
+        <select id="role" name="role">
+            <option value="ADMIN" th:selected="${user.role == 'ADMIN'}">Admin</option>
+            <option value="USER" th:selected="${user.role == 'USER'}">User</option>
+        </select>
+
+        <button type="submit">Update Role</button>
+    </form>
+
+    <a href="/user/list" class="back-button">Back to User List</a>
+</div>
+
+</body>
+</html>
+
+
+

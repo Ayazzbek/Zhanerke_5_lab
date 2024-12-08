@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Category</title>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 2em;
+            color: #2c3e50;
+        }
+
+        /* Форма добавления категории */
+        .category-form {
+            width: 50%;
+            margin: 30px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .category-form input,
+        .category-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .category-form button {
+            padding: 10px 20px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+
+        .category-form button:hover {
+            background-color: #3498db;
+        }
+
+        /* Ссылка на возврат */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #2980b9;
+        }
+
+        .back-link a {
+            text-decoration: none;
+            color: #2980b9;
+        }
+
+        .back-link a:hover {
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+
+
+<h1>Create New Category</h1>
+
+<!-- Форма для добавления новой категории -->
+<div class="category-form">
+    <form method="post" action="/categories/save">
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="categoryName" required>
+        <br>
+        <label for="desc">Description:</label>
+        <textarea id="desc" name="categoryDesc"></textarea>
+        <br>
+        <button type="submit">Save</button>
+    </form>
+</div>
+
+<!-- Ссылка для возврата на страницу категорий -->
+<div class="back-link">
+    <a href="/categories">Back to Categories</a>
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="file"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .cancel-link {
+            text-align: center;
+            display: block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .cancel-link:hover {
+            text-decoration: underline;
+        }
+
+        .form-group img {
+            display: block;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            max-width: 150px;
+            max-height: 150px;
+            object-fit: cover;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Update Profile</h1>
+
+    <form th:action="@{/user/profile/update}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:value="${_csrf.token}" name="${_csrf.parameterName}"/>
+
+        <!-- Profile Picture Display -->
+        <div class="form-group">
+            <img th:src="@{${user.profilePicture != null && user.profilePicture != '' ? user.profilePicture : '/images/default-avatar.png'}}" alt="Profile Picture"/>
+        </div>
+
+        <!-- User Name -->
+        <div class="form-group">
+            <label for="userName">Name:</label>
+            <input type="text" id="userName" name="userName" th:value="${user.userName}" required>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:value="${user.email}" disabled>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+            <label for="password">New Password:</label>
+            <input type="password" id="password" name="password" placeholder="Leave blank to keep current password">
+        </div>
+
+        <!-- Profile Picture Upload -->
+        <div class="form-group">
+            <label for="profilePicture">Profile Picture:</label>
+            <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+        </div>
+
+        <!-- Buttons -->
+        <div class="form-group">
+            <button type="submit">Save Changes</button>
+        </div>
+
+        <a class="cancel-link" href="/user/profile">Cancel</a>
+    </form>
+</div>
+
+</body>
+</html>
+

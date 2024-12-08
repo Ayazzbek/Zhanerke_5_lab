@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Task</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f7fc;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 2em;
+      color: #2c3e50;
+    }
+
+    /* Card-like container for the form */
+    .form-container {
+      width: 60%;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      font-size: 1.1em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    /* Form fields */
+    input, select, textarea, button {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Back Button */
+    .back-button {
+      text-decoration: none;
+      display: inline-block;
+      background-color: #ecf0f1;
+      color: #3498db;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    .back-button:hover {
+      background-color: #3498db;
+      color: white;
+    }
+
+    /* Styling for disabled inputs */
+    input[disabled] {
+      background-color: #f9f9f9;
+      cursor: not-allowed;
+    }
+
+  </style>
+</head>
+<body>
+
+<h1>Edit Task</h1>
+
+<!-- Form Container: Form is shown only to ADMIN -->
+<div class="form-container" th:if="${user.role == 'ADMIN'}">
+  <form th:action="@{/tasks/edit/{id}(id=${task.taskId})}" method="post">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" th:value="${task.title}" required>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="taskDescription" th:text="${task.taskDescription}"></textarea>
+
+    <label for="status">Status:</label>
+    <select id="status" name="taskStatus">
+      <option value="PENDING" th:selected="${task.taskStatus == T(com.example.TaskStatus).PENDING}">Pending</option>
+      <option value="IN_PROGRESS" th:selected="${task.taskStatus == T(com.example.TaskStatus).IN_PROGRESS}">In Progress</option>
+      <option value="COMPLETED" th:selected="${task.taskStatus == T(com.example.TaskStatus).COMPLETED}">Completed</option>
+      <option value="CANCELLED" th:selected="${task.taskStatus == T(com.example.TaskStatus).CANCELLED}">Cancelled</option>
+    </select>
+
+    <label for="dueDate">Due Date:</label>
+    <input type="date" id="dueDate" name="dueDate" th:value="${task.dueDate}">
+
+    <label for="user">Assign to User:</label>
+    <select id="user" name="userId" required>
+      <th:block th:each="user : ${users}">
+        <option th:value="${user.userId}" th:text="${user.email}"
+                th:selected="${task.user != null and task.user.userId == user.userId}"></option>
+      </th:block>
+    </select>
+
+    <label for="category">Category:</label>
+    <select id="category" name="categoryId">
+      <th:block th:each="category : ${categories}">
+        <option th:value="${category.categoryId}" th:text="${category.categoryName}"
+                th:selected="${task.category.categoryId == category.categoryId}"></option>
+      </th:block>
+    </select>
+
+    <button type="submit">Update</button>
+  </form>
+</div>
+
+<!-- If the user is not ADMIN, show an error or back button -->
+<div th:if="${user.role != 'ADMIN'}">
+  <p>You do not have permission to edit this task.</p>
+  <a href="/tasks" class="back-button">Back to Tasks</a>
+</div>
+
+
+
+</body>
+</html>
+
+
